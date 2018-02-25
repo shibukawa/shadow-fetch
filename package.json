@@ -1,0 +1,32 @@
+{
+    "name": "shadow-fetch",
+    "version": "0.1.0",
+    "description": "fake fetch/httpServer for SSR",
+    "main": "index.js",
+    "browser": "browser.js",
+    "scripts": {
+        "test": "ava"
+    },
+    "keywords": [
+        "isomorphic",
+        "fetch"
+    ],
+    "author": "Yoshiki Shibukawa",
+    "license": "MIT",
+    "devDependencies": {
+        "ava": "^0.25.0",
+        "eslint": "^4.18.1",
+        "express": "^4.16.2",
+        "node-fetch": "^2.0.0",
+        "streamtest": "^1.2.3"
+    },
+    "ava": {
+        "files": [
+            "test/test-*.js"
+        ],
+        "source": [
+            "lib/**/*.{js,jsx}",
+            "index.js"
+        ]
+    }
+}

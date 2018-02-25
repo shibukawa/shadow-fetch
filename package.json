@@ -5,7 +5,7 @@
     "main": "index.js",
     "browser": "browser.js",
     "scripts": {
-        "test": "ava"
+        "test": "ava -v"
     },
     "keywords": [
         "isomorphic",

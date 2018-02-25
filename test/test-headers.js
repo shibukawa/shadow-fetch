@@ -46,6 +46,34 @@ test("set/get", (t) => {
         ]);
 });
 
+test("init with object", (t) => {
+    const headers = new Headers({
+        "accept-encoding": "gzip",
+        "content-type": "application/json"
+    });
+    t.is(headers.get("accept-encoding"), "gzip");
+    t.is(headers.get("content-type"), "application/json");
+});
+
+test("init with array", (t) => {
+    const headers = new Headers([
+        ["accept-encoding", "gzip"],
+        ["content-type", "application/json"]
+    ]);
+    t.is(headers.get("accept-encoding"), "gzip");
+    t.is(headers.get("content-type"), "application/json");
+});
+
+test("init with Headers", (t) => {
+    const originalHeaders = new Headers({
+        "accept-encoding": "gzip",
+        "content-type": "application/json"
+    });
+    const headers = new Headers(originalHeaders);
+    t.is(headers.get("accept-encoding"), "gzip");
+    t.is(headers.get("content-type"), "application/json");
+});
+
 test("client mode", (t) => {
     const headers = new Headers();
 

@@ -1,6 +1,6 @@
 const test = require("ava");
 var StreamTest = require("streamtest");
-const { IncomingMessage, bodyKey, jsonKey, formKey } = require("../lib/incomingmessage");
+const { IncomingMessage, bodyKey, jsonKey, formKey, textKey } = require("../lib/incomingmessage");
 
 process.on("uncaughtException", console.dir);
 
@@ -43,7 +43,8 @@ test("init with body", (t) => {
         },
         body: "hello world"
     });
-    t.is(req[bodyKey], "hello world");
+    t.is(req[bodyKey].toString("utf8"), "hello world");
+    t.is(req[textKey].toString("utf8"), "hello world");
     t.is(req.headers["content-type"], "text/plain");
     t.is(req.headers["content-length"], "11");
 });
@@ -87,7 +88,7 @@ test("support reader stream interface", (t) => {
 
     req.on("data", (data) => {
         called.push("data");
-        t.is(data, "hello world");
+        t.is(data.toString("utf8"), "hello world");
     });
 
     t.deepEqual(called, ["data", "end"]);

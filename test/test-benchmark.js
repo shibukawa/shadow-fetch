@@ -1,8 +1,8 @@
 const test = require("ava");
-const { initFetch } = require("./nodejs-implementation");
+const { initStandardFetch, printBenchmark } = require("./helper");
 
 test("the actual connection and receive json", async (t) => {
-    const { fetch, createServer } = initFetch();
+    const { fetch, createServer } = initStandardFetch();
 
     const server = createServer((req, res) => {
         res.writeHead(200, { "Content-Type": "application/json" });
@@ -13,17 +13,17 @@ test("the actual connection and receive json", async (t) => {
         server.listen(async () => {
             const { port } = server.address();
 
-            const start = Date.now();
+            const start = process.hrtime();
             const res = await fetch(`http://localhost:${port}/test`);
             const json = await res.json();
-            const end = Date.now();
+            const end = process.hrtime(start);
 
             t.is(res.status, 200);
             t.is(res.statusText, "OK");
             t.is(res.ok, true);
 
             t.is(json.message, "hello");
-            t.log(`Benchmark regular fetch and server: ${end - start}ms`);
+            t.log(printBenchmark("Benchmark regular fetch and server", end));
             server.close(resolve);
         });
     });

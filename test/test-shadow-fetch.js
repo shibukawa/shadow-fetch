@@ -1,5 +1,6 @@
 const test = require("ava");
 const { initFetch } = require("../index");
+const { printBenchmark } = require("./helper");
 
 test("the simplest connection and receive regular output", async (t) => {
     const { fetch, createServer } = initFetch();
@@ -11,17 +12,17 @@ test("the simplest connection and receive regular output", async (t) => {
 
     server.listen(80);
 
-    const start = Date.now();
+    const start = process.hrtime();
     const res = await fetch("/test");
     const json = await res.json();
-    const end = Date.now();
+    const end = process.hrtime(start);
 
     t.is(res.status, 200);
     t.is(res.statusText, "OK");
     t.is(res.ok, true);
     t.is(json.message, "hello");
 
-    t.log(`Benchmark shadow fetch and server with standard output: ${end - start}ms`);
+    t.log(printBenchmark("Benchmark shadow fetch and server with standard output", end));
 });
 
 test("the simplest connection and receive regular output", async (t) => {
@@ -35,17 +36,17 @@ test("the simplest connection and receive regular output", async (t) => {
 
     server.listen(80);
 
-    const start = Date.now();
+    const start = process.hrtime();
     const res = await fetch("/test");
     const json = await res.json();
-    const end = Date.now();
+    const end = process.hrtime(start);
 
     t.is(res.status, 200);
     t.is(res.statusText, "OK");
     t.is(res.ok, true);
     t.is(json.message, "hello");
 
-    t.log(`Benchmark shadow fetch and server with non-standard output: ${end - start}ms`);
+    t.log(printBenchmark("Benchmark shadow fetch and server with non-standard output", end));
 });
 
 test("write chunks and receive text", async (t) => {

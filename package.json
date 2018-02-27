@@ -5,7 +5,8 @@
     "main": "index.js",
     "browser": "browser.js",
     "scripts": {
-        "test": "ava -v"
+        "test": "ava -v",
+        "benchmark": "ava -v --serial"
     },
     "keywords": [
         "isomorphic",

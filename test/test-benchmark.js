@@ -12,16 +12,17 @@ test("the actual connection and receive json", async (t) => {
     return new Promise((resolve) => {
         server.listen(async () => {
             const { port } = server.address();
+
             const start = Date.now();
             const res = await fetch(`http://localhost:${port}/test`);
+            const json = await res.json();
+            const end = Date.now();
 
             t.is(res.status, 200);
             t.is(res.statusText, "OK");
             t.is(res.ok, true);
 
-            const json = await res.json();
             t.is(json.message, "hello");
-            const end = Date.now();
             t.log(`Benchmark regular fetch and server: ${end - start}ms`);
             server.close(resolve);
         });

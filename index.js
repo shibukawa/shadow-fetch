@@ -78,5 +78,7 @@ module.exports = {
     initFetch,
     fetch,
     createServer,
-    Headers
+    Headers,
+    IncomingMessage,
+    ServerResponse,
 };

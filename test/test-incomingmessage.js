@@ -49,28 +49,6 @@ test("init with body", (t) => {
     t.is(req.headers["content-length"], "11");
 });
 
-test("init with non-standard json property", (t) => {
-    const req = new IncomingMessage("/test", {
-        method: "post",
-        json: {
-            hello: "world"
-        }
-    });
-    t.deepEqual(req[jsonKey], { hello: "world" });
-    t.is(req.headers["content-type"], "application/json");
-});
-
-test("init with non-standard form property", (t) => {
-    const req = new IncomingMessage("/test", {
-        method: "post",
-        form: {
-            hello: "world"
-        }
-    });
-    t.deepEqual(req[formKey], { hello: "world" });
-    t.is(req.headers["content-type"], "application/x-www-form-urlencoded");
-});
-
 test("support reader stream interface", (t) => {
     const req = new IncomingMessage("/test", {
         method: "post",

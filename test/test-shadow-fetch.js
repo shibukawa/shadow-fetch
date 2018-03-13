@@ -25,7 +25,7 @@ test("the simplest connection and receive regular output", async (t) => {
     t.log(printBenchmark("Benchmark shadow fetch and server with standard output", end));
 });
 
-test("the simplest connection and receive regular output", async (t) => {
+test("the simplest connection and receive JSON output", async (t) => {
     const { fetch, createServer } = initFetch();
 
     const server = createServer((req, res) => {
@@ -46,7 +46,7 @@ test("the simplest connection and receive regular output", async (t) => {
     t.is(res.ok, true);
     t.is(json.message, "hello");
 
-    t.log(printBenchmark("Benchmark shadow fetch and server with non-standard output", end));
+    t.log(printBenchmark("Benchmark shadow fetch and server with JSON output", end));
 });
 
 test("write chunks and receive text", async (t) => {
@@ -86,4 +86,27 @@ test("POST method and receive header", async (t) => {
     t.is(res.statusText, "Created");
     t.is(res.ok, true);
     t.is(res.headers.get("location"), "/test/2");
+});
+
+const redirectApp = (req, res) => {
+    if (req.url === "/redirect") {
+        res.writeHead(302, { "Location": "/landing-page" });
+        res.end();
+    } else if (req.url === "/landing-page") {
+        res.end("landed");
+    }
+};
+
+test("shadowFetch can follow redirection by default", async (t) => {
+    const { fetch, createServer } = initFetch();
+
+    const server = createServer(redirectApp);
+
+    server.listen(80);
+
+    const res = await fetch("/redirect");
+    t.is(res.status, 200);
+    t.is(res.redirected, true);
+    const message = await res.text();
+    t.is(message, "landed");
 });

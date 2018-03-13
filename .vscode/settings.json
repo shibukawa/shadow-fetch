@@ -1,6 +1,6 @@
 {
     "workbench.editor.enablePreview": false,
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
     "eslint.autoFixOnSave": true,
     "javascript.validate.enable": false,
     "flow.useNPMPackagedFlow": true,

@@ -12,9 +12,20 @@ class Connection {
 
     async fetch(url, opts) {
         return new Promise((resolve) => {
-            this._handler(new IncomingMessage(url, opts), new ServerResponse((res) => {
-                resolve(new Response(res));
-            }));
+            let redirected = false;
+            const receiveResponse = (res) => {
+                if ([301, 302, 303, 307, 308].includes(res.statusCode)) {
+                    redirected = true;
+                    this._handler(
+                        new IncomingMessage(res._headers.get("location"), opts),
+                        new ServerResponse(receiveResponse));
+                } else {
+                    const clientResponse = new Response(res);
+                    clientResponse._redirected = redirected;
+                    resolve(clientResponse);
+                }
+            };
+            this._handler(new IncomingMessage(url, opts), new ServerResponse(receiveResponse));
         });
     }
 }
@@ -71,14 +82,21 @@ const initFetch = () => {
     };
 };
 
-
-const { fetch, createServer } = initFetch();
-
 module.exports = {
     initFetch,
-    fetch,
-    createServer,
     Headers,
     IncomingMessage,
     ServerResponse,
 };
+
+if (typeof window === "undefined") {
+    if (!global.shadowFetch) {
+        const { fetch, createServer } = initFetch();
+        module.exports.shadowFetch = module.exports.fetch = global.shadowFetch = fetch;
+        module.exports.createServer = global.createShadowServer = createServer;
+    } else {
+        module.exports.shadowFetch = module.exports.fetch = global.shadowFetch;
+        module.exports.createServer = global.createShadowServer;
+    }
+}
+

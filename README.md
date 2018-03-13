@@ -58,18 +58,16 @@ const { fetch, Headers } = require("shadow-fetch");
 It provides three functions that are almost compatible with standard [``fetch()``](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API):
 
 * ``shadowFetch()``: Provides direct access between ``createServer``.
-* ``sunFetch()``: Alias of ``iosmorphic-unfetch``'s ``fetch``.
-* ``fetch()``: Alias of ``shadowFetch()`` or ``sunFetch()``.
+* ``fetch()``: Alias of ``shadowFetch()`` or standard ``fetch()``.
 
 Usually ``fetch()`` is the only function you use.
 
 |  Name  | on Node.js | on Browser |
 |:-----------:|:-----------|:------------|
-| ``fetch`` | ``shadowFetch`` | ``sunFetch`` |
+| ``fetch`` | ``shadowFetch`` | standard ``fetch`` |
 | ``shadowFetch`` | ``shadowFetch`` | ``shadowFetch`` |
-| ``sunFetch`` | ``sunFetch`` | ``sunFetch`` |
 
-If you want to select actual HTTP access or not explicitly, use ``sunFetch()``.
+If you want to select actual HTTP access or not explicitly, use regular ``fetch()``.
 
 This library provides ``Headers`` compatible class too.
 
@@ -90,6 +88,9 @@ const { fetch, createServer } = require("shadow-fetch");
 ```
 
 ## Utility Function
+
+* ``initFetch()``: It generates ``fetch()`` (shadow version) and ``createServer()`` they are connected internally. It is good for writing unit tests.
+
 
 ## License
 

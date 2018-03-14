@@ -1,3 +1,5 @@
 node_modules
+coverage
+.nyc_output
 examples/next.js/.next/
 examples/next.js/package-lock.json

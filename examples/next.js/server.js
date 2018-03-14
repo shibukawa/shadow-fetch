@@ -1,10 +1,11 @@
 const next = require("next");
 const { createServer } = require("http");
 const express = require("express");
+const bodyParser = require("body-parser");
 //const shadowFetch = require("shadow-fetch");
 //const shadowFetchMiddleware = require("shadow-fetch-express");
 const shadowFetch = require("../../index");
-const { shadowFetchMiddleware, bodyParser } = require("../../shadow-fetch-express/index");
+const { shadowFetchMiddleware } = require("../../shadow-fetch-express/index");
 
 
 const dev = process.env.NODE_ENV !== "production";

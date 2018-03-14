@@ -45,9 +45,116 @@ $ npm install shadow-fetch
 
 ### Node.js's http server
 
+shadow-fetch provides the function that is compatible with ``http.createServer()``. shadow-fetch's server is available inside the same process. So useally you should launch two servers.
+
+```js
+const { createServer } = require("shadow-fetch");
+const { http } = require("http");
+
+handler = (req, res) => {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ message: "hello" }));
+};
+
+const server = createServer(handler);
+server.listen();
+
+const server = http.createServer(handler);
+server.listen(80);
+```
+
+You can use ``fetch`` function to access this server:
+
+```js
+const res = await fetch("/test");
+
+if (res.ok) {
+    const json = await res.json();
+    console.log(json.message);
+}
+
+```
+
 ### Express.js
 
 Express.js modifies request object (replace prototype). shadow-fetch's middleware for Express.js enable shadow-fetch's feature even if you uses Express.js
+
+You should pass ``express()`` result to ``createServer()`` instead of  ``app.listen()``. That uses Node.js's ``createServer()`` internally,
+
+```js
+const { createServer } = require("shadow-fetch");
+const { shadowFetchMiddleware } = require("shadow-fetch-express");
+
+const app = express();
+app.use(shadowFetchMiddleware);
+app.use(bodyParser.json());
+app.post("/test", (req, res) => {
+    t.is(req.shadow, true);
+    t.is(req.body.message, "hello");
+    res.send({ message: "world" });
+});
+const { fetch, createServer } = initFetch();
+
+createServer(app);
+```
+
+### Next.js
+
+It is alomot as same as Express.js. This package provides factory function that makes ``fetch`` and ``createServer()`` pairs. But they are not working on Next.js environment. You should pre careted ``createServer()`` and ``fetch()`` functions they are available via just ``require`` (``import``).
+
+```
+const next = require("next");
+const http = require("http");
+const express = require("express");
+const bodyParser = require("body-parser");
+const createServer = require("shadow-fetch");
+const { shadowFetchMiddleware } = require("shadow-fetch-express");
+
+const dev = process.env.NODE_ENV !== "production";
+const app = next({ dev });
+const handle = app.getRequestHandler();
+
+app.prepare().then(() => {
+    const server = express();
+    server.use(shadowFetchMiddleware);
+    server.use(bodyParser.json());
+    server.get("/api/message", (req, res) => {
+        res.json({message: "hello via shadow-fetch"});
+    });
+    server.get("*", (req, res) => {
+        return handle(req, res);
+    });
+    // enable shadow fetch entrypoint
+    createServer(server).listen();
+    // enable standard HTTP entrypoint
+    http.createServer(server).listen(3000, err => {
+        if (err) throw err;
+        console.log("> Ready on http://localhost:3000");
+    });
+});
+```
+
+## Server Side Rendering and Authentication
+
+Sometimes, you want to add authentication feature. The standard ``fetch`` were called from browseres and shadow-fetch was called during server side rendering.
+
+You can detect the client environment inside event handler. If the API checks authentication, you should check ``shadow`` property.
+
+```
+const isAuthenticatedAPI = (req, res, next) => {
+    if (req.shadow || req.isAuthenticated()) {
+        return next();
+    } else {
+        res.sendStatus(403);
+    }
+};
+
+server.get("/api/item/:id", isAuthenticatedAPI, (req, res) => {
+    // API implementation
+});
+```
+
+[This is why I started to make this package](https://github.com/zeit/next.js/issues/3797).
 
 ## Client API
 

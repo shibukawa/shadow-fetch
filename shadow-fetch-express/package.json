@@ -1,12 +1,12 @@
 {
   "name": "shadow-fetch-express",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "express.js middleware of shadow-fetch",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }

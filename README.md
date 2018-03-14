@@ -1,10 +1,9 @@
 # shadow-fetch
 
 [![Build Status](https://travis-ci.org/shibukawa/shadow-fetch.svg?branch=master)](https://travis-ci.org/shibukawa/shadow-fetch)
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
+[![npm version](https://badge.fury.io/js/shadow-fetch.svg)](https://badge.fury.io/js/shadow-fetch)
+[![NPM](https://nodei.co/npm/shadow-fetch.png)](https://nodei.co/npm/shadow-fetch/)
 [![codecov](https://codecov.io/gh/shibukawa/shadow-fetch/branch/master/graph/badge.svg)](https://codecov.io/gh/shibukawa/shadow-fetch)
-[![Gratipay][gratipay-image]][gratipay-url]
 
 Accelorator of Server Side Rendering (and unit tests).
 

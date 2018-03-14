@@ -1,6 +1,6 @@
 {
     "name": "shadow-fetch-express",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "express.js middleware of shadow-fetch",
     "main": "index.js",
     "scripts": {

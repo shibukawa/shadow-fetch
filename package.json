@@ -1,6 +1,6 @@
 {
     "name": "shadow-fetch",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "fake fetch/httpServer for SSR",
     "main": "index.js",
     "browser": "browser.js",

@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/shibukawa/shadow-fetch.svg?branch=master)](https://travis-ci.org/shibukawa/shadow-fetch)
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![Test Coverage][coveralls-image]][coveralls-url]
+[![codecov](https://codecov.io/gh/shibukawa/shadow-fetch/branch/master/graph/badge.svg)](https://codecov.io/gh/shibukawa/shadow-fetch)
 [![Gratipay][gratipay-image]][gratipay-url]
 
 Accelorator of Server Side Rendering (and unit tests).

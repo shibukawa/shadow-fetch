@@ -9,9 +9,15 @@
         "benchmark": "ava -v --serial",
         "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
     },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/shibukawa/shadow-fetch"
+    },
     "keywords": [
         "isomorphic",
-        "fetch"
+        "fetch",
+        "next.js",
+        "express.js"
     ],
     "author": "Yoshiki Shibukawa",
     "license": "MIT",

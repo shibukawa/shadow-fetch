@@ -1,6 +1,18 @@
 const test = require("ava");
 const express = require("express");
 const bodyParser = require("body-parser");
+const restoreOriginalRequire = require("override-require");
+
+
+// override require to resolve shadow-fetch form subproject
+const isOverride = (request) => {
+    return request === "shadow-fetch";
+};
+const resolveRequest = () => {
+    return require("../index");
+};
+restoreOriginalRequire(isOverride, resolveRequest);
+
 
 const { initFetch } = require("../index");
 const { shadowFetchMiddleware } = require("../shadow-fetch-express/index");

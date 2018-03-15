@@ -1,6 +1,6 @@
 const { Headers } = require("./lib/headers");
 const { ServerResponse } = require("./lib/serverresponse");
-const { IncomingMessage } = require("./lib/incomingmessage");
+const { IncomingMessage, shadowKey } = require("./lib/incomingmessage");
 const { Response } = require("./lib/response");
 
 
@@ -87,6 +87,7 @@ module.exports = {
     Headers,
     IncomingMessage,
     ServerResponse,
+    shadowKey
 };
 
 if (typeof window === "undefined") {
@@ -94,9 +95,11 @@ if (typeof window === "undefined") {
         const { fetch, createServer } = initFetch();
         module.exports.shadowFetch = module.exports.fetch = global.shadowFetch = fetch;
         module.exports.createServer = global.createShadowServer = createServer;
+        module.exports.createShadowServer = createServer;
     } else {
         module.exports.shadowFetch = module.exports.fetch = global.shadowFetch;
         module.exports.createServer = global.createShadowServer;
+        module.exports.createShadowServer = global.createShadowServer;
     }
 }
 

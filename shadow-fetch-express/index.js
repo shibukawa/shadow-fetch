@@ -1,5 +1,4 @@
-const { IncomingMessage, shadowKey } = require("../lib/incomingmessage");
-const { ServerResponse } = require("../lib/serverresponse");
+const { IncomingMessage, shadowKey, ServerResponse } = require("shadow-fetch");
 
 const shadowFetchMiddleware = (req, res, next) => {
     if (req[shadowKey]) {

@@ -2,8 +2,8 @@
 
 [![Build Status](https://travis-ci.org/shibukawa/shadow-fetch.svg?branch=master)](https://travis-ci.org/shibukawa/shadow-fetch)
 [![npm version](https://badge.fury.io/js/shadow-fetch.svg)](https://badge.fury.io/js/shadow-fetch)
-[![NPM](https://nodei.co/npm/shadow-fetch.png)](https://nodei.co/npm/shadow-fetch/)
 [![codecov](https://codecov.io/gh/shibukawa/shadow-fetch/branch/master/graph/badge.svg)](https://codecov.io/gh/shibukawa/shadow-fetch)
+[![NPM](https://nodei.co/npm/shadow-fetch.png)](https://nodei.co/npm/shadow-fetch/)
 
 Accelorator of Server Side Rendering (and unit tests).
 
@@ -65,13 +65,14 @@ server.listen(80);
 You can use ``fetch`` function to access this server:
 
 ```js
+import { fetch } from "shadow-fetch";
+
 const res = await fetch("/test");
 
 if (res.ok) {
     const json = await res.json();
     console.log(json.message);
 }
-
 ```
 
 ### Express.js
@@ -101,7 +102,7 @@ createServer(app);
 
 It is alomot as same as Express.js. This package provides factory function that makes ``fetch`` and ``createServer()`` pairs. But they are not working on Next.js environment. You should pre careted ``createServer()`` and ``fetch()`` functions they are available via just ``require`` (``import``).
 
-```
+```js
 const next = require("next");
 const http = require("http");
 const express = require("express");
@@ -139,7 +140,7 @@ Sometimes, you want to add authentication feature. The standard ``fetch`` were c
 
 You can detect the client environment inside event handler. If the API checks authentication, you should check ``shadow`` property.
 
-```
+```js
 const isAuthenticatedAPI = (req, res, next) => {
     if (req.shadow || req.isAuthenticated()) {
         return next();
@@ -175,19 +176,18 @@ Usually ``fetch()`` is the only function you use.
 
 If you want to select actual HTTP access or not explicitly, use regular ``fetch()``.
 
-This library provides ``Headers`` compatible class too.
+This library provides ``Headers`` compatible class too. But there is no ``Request`` class now.
 
 ## Server API
 
-* ``createServer()``: It is a compatible function of Node.js's ``http.createServer()``.
+* ``createServer()``: It is a compatible function of Node.js's ``http.createServer()``. This package provides ``createShadowServer()`` for your convenience.
 * ``IncomingMessage``: Request object of server code. It is also compatible with Node.js's ``IncomingMessage`` except the following members:
 
     * ``shadow`` property: It always ``true``. You can identify the request is made by ``shadowFetch`` or regular HTTP access.
-    *
 
 * ``ServerResponse``: Response object of server code. It is also compatible with Node.js's ``ServerResponse`` except the following members:
 
-    * ``writeJSON()``: It stores JSON without calling stringify function. You can get JSON directly via ``Response#json()`` method of ``shadowFetch()``.
+    * ``writeJSON()``: It stores JSON without calling ``JSON.stringify()`` function. You can get JSON directly via ``Response#json()`` method of ``shadowFetch()``.
 
 ```js
 const { fetch, createServer } = require("shadow-fetch");

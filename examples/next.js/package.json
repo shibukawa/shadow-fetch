@@ -17,6 +17,8 @@
     "next": "^5.0.0",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "shadow-fetch": "file:shadow-fetch-0.1.2.tgz",
+    "shadow-fetch-express": "file:shadow-fetch-express-0.1.2.tgz"
   }
 }

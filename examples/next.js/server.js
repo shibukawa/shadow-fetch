@@ -2,10 +2,8 @@ const next = require("next");
 const { createServer } = require("http");
 const express = require("express");
 const bodyParser = require("body-parser");
-//const shadowFetch = require("shadow-fetch");
-//const shadowFetchMiddleware = require("shadow-fetch-express");
-const shadowFetch = require("../../index");
-const { shadowFetchMiddleware } = require("../../shadow-fetch-express/index");
+const { createShadowServer } = require("shadow-fetch");
+const { shadowFetchMiddleware } = require("shadow-fetch-express");
 
 
 const dev = process.env.NODE_ENV !== "production";
@@ -24,7 +22,7 @@ app.prepare().then(() => {
         return handle(req, res);
     });
     // enable shadow fetch entrypoint
-    shadowFetch.createServer(server).listen();
+    createShadowServer(server).listen();
     // enable standard HTTP entrypoint
     createServer(server).listen(3000, err => {
         if (err) throw err;

@@ -5,20 +5,15 @@ import { fetch } from "../../../";
 
 export default class Index extends Component {
     static async getInitialProps({req}) {
-        console.log(fetch.toString());
-        console.log("call /api/message");
         const res = await fetch("/api/message");
-        console.log(res);
         const message = await res.json();
-        console.log(message);
         return message;
     }
 
     render() {
-        console.log(this.props);
         return <div>
             Message from shadow-fetch:
-            ${this.props.message}
+            {this.props.message}
         </div>;
     }
 }

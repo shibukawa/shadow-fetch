@@ -1,8 +1,13 @@
 const test = require("ava");
 var StreamTest = require("streamtest");
-const { IncomingMessage, bodyKey, jsonKey, formKey, textKey } = require("../lib/incomingmessage");
+const { IncomingMessage, bodyKey, textKey } = require("../lib/incomingmessage");
 
 process.on("uncaughtException", console.dir);
+
+test("init without url", (t) => {
+    const req = new IncomingMessage();
+    t.is(req.url, undefined);
+});
 
 test("init with url", (t) => {
     const req = new IncomingMessage("/test");
@@ -49,6 +54,41 @@ test("init with body", (t) => {
     t.is(req.headers["content-length"], "11");
 });
 
+test("init with body without headers (1)", (t) => {
+    const req = new IncomingMessage("/test", {
+        method: "post",
+        body: "hello world"
+    });
+    t.is(req[bodyKey].toString("utf8"), "hello world");
+    t.is(req[textKey].toString("utf8"), "hello world");
+    t.is(req.headers["content-type"], "text/plain");
+    t.is(req.headers["content-length"], "11");
+});
+
+
+test("init with body without headers (2)", (t) => {
+    const req = new IncomingMessage("/test", {
+        method: "post",
+        body: 10
+    });
+    t.is(req[bodyKey].toString("utf8"), "10");
+    t.is(req.headers["content-type"], "text/plain");
+    t.is(req.headers["content-length"], "2");
+});
+
+test("init with body without headers (3)", (t) => {
+    const req = new IncomingMessage("/test", {
+        method: "post",
+        headers: {
+            "cookie": "session=12345"
+        },
+        body: 10
+    });
+    t.is(req[bodyKey].toString("utf8"), "10");
+    t.is(req.headers["content-type"], "text/plain");
+    t.is(req.headers["content-length"], "2");
+});
+
 test("support reader stream interface", (t) => {
     const req = new IncomingMessage("/test", {
         method: "post",
@@ -60,8 +100,15 @@ test("support reader stream interface", (t) => {
 
     const called = [];
 
+    t.is(req.listeners("end").length, 0);
+    t.is(req.listeners("data").length, 0);
+
     req.on("end", () => {
         called.push("end");
+    });
+
+    req.on("end", () => {
+        called.push("end2");
     });
 
     req.on("data", (data) => {
@@ -69,7 +116,9 @@ test("support reader stream interface", (t) => {
         t.is(data.toString("utf8"), "hello world");
     });
 
-    t.deepEqual(called, ["data", "end"]);
+    t.deepEqual(called, ["data", "end", "end2"]);
+    t.is(req.listeners("end").length, 2);
+    t.is(req.listeners("data").length, 1);
 });
 
 test("stream compatibility test", async (t) => {

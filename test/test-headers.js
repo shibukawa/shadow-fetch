@@ -46,6 +46,35 @@ test("set/get", (t) => {
         ]);
 });
 
+test("set with not-string key", (t) => {
+    const headers = new Headers();
+
+    headers.set(1, "convert-to-number");
+    t.is(headers.get("1"), "convert-to-number");
+    t.is(headers.has("1"), true);
+});
+
+test("set with invalid key", (t) => {
+    const headers = new Headers();
+
+    let message = null;
+    try {
+        headers.set("不正なキー", "invalid key");
+    } catch (e) {
+        message = e.message;
+    }
+    t.is(message, "Invalid character in header field name");
+});
+
+test("delete", (t) => {
+    const headers = new Headers();
+
+    headers.set("accept-encoding", "gzip");
+    headers.delete("Accept-Encoding");
+    t.is(headers.get("accept-encoding"), null);
+    t.is(headers.has("accept-encoding"), false);
+});
+
 test("init with object", (t) => {
     const headers = new Headers({
         "accept-encoding": "gzip",
@@ -72,6 +101,24 @@ test("init with Headers", (t) => {
     const headers = new Headers(originalHeaders);
     t.is(headers.get("accept-encoding"), "gzip");
     t.is(headers.get("content-type"), "application/json");
+});
+
+test("forEach", (t) => {
+    const headers = new Headers([
+        ["accept-encoding", "gzip"],
+        ["content-type", "application/json"]
+    ]);
+
+    const entries = [];
+    headers.forEach((key, value) => {
+        entries.push([key, value]);
+    });
+
+    t.deepEqual(entries,
+        [
+            ["gzip", "accept-encoding"],
+            ["application/json", "content-type"]
+        ]);
 });
 
 test("client mode", (t) => {
@@ -121,8 +168,10 @@ test("convert to client mode", (t) => {
     headers._clientMode = false;
 
     headers.set("accept-encoding", ["gzip", "br"]);
+    headers.set("Content-Type", "application/json");
 
     convertToClientMode(headers);
 
     t.is(headers.get("accept-encoding"), "gzip, br");
+    t.is(headers.get("content-type"), "application/json");
 });

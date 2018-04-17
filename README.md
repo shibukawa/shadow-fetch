@@ -197,6 +197,28 @@ const { fetch, createServer } = require("shadow-fetch");
 
 * ``initFetch()``: It generates ``fetch()`` (shadow version) and ``createServer()`` they are connected internally. It is good for writing unit tests.
 
+## Trouble Shooting
+
+### ``"shadow-fetch is not initialized properly. See https://github.com/shibukawa/shadow-fetch#trouble-shooting."``
+
+This error is thrown when ``fetch`` is used without initialization. You should call shadow-fetch's ``createServer`` like [this](https://github.com/shibukawa/shadow-fetch#nodejss-http-server).
+
+### Error occures inside web server handlers
+
+Express-middleware is not installed. Read [this section](https://github.com/shibukawa/shadow-fetch#expressjs).
+
+Express.js overwrite prototype of ``ServerResponse``/``IncomingMessage`` with http's ones inside its framework.
+In that case, required properties are not initilized because original constructor is not called.
+So some method calls are failed like the following error:
+
+```
+ TypeError: Cannot read property 'push' of undefined
+    at ServerResponse._writeRaw (_http_outgoing.js:281:24)
+    at ServerResponse._send (_http_outgoing.js:240:15)
+    at ServerResponse.end (_http_outgoing.js:770:16)
+    at ServerResponse.end (/Users/shibukawa/develop/frx/dam-front/node_modules/compression/index.js:107:21)
+    at ServerResponse.send (/Users/shibukawa/develop/frx/dam-front/node_modules/express/lib/response.js:221:10)
+```
 
 ## License
 

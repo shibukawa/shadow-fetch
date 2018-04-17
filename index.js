@@ -6,12 +6,15 @@ const { Response } = require("./lib/response");
 
 class Connection {
     constructor() {
-        this._handler;
+        this._handler = null;
         this.fetch = this.fetch.bind(this);
     }
 
     async fetch(url, opts) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
+            if (!this._handler) {
+                return reject(new Error("shadow-fetch is not initialized properly. See https://github.com/shibukawa/shadow-fetch#trouble-shooting."))
+            }
             let redirected = false;
             const receiveResponse = (res) => {
                 if ([301, 302, 303, 307, 308].includes(res.statusCode)) {
@@ -82,24 +85,19 @@ const initFetch = () => {
     };
 };
 
-module.exports = {
-    initFetch,
-    Headers,
-    IncomingMessage,
-    ServerResponse,
-    shadowKey
-};
-
 if (typeof window === "undefined") {
     if (!global.shadowFetch) {
         const { fetch, createServer } = initFetch();
-        module.exports.shadowFetch = module.exports.fetch = global.shadowFetch = fetch;
-        module.exports.createServer = global.createShadowServer = createServer;
-        module.exports.createShadowServer = createServer;
-    } else {
-        module.exports.shadowFetch = module.exports.fetch = global.shadowFetch;
-        module.exports.createServer = global.createShadowServer;
-        module.exports.createShadowServer = global.createShadowServer;
+        global.shadowFetch = fetch;
+        global.createShadowServer = createServer;
     }
+    module.exports = global.shadowFetch;
+    module.exports.shadowFetch = module.exports.fetch = global.shadowFetch;
+    module.exports.createShadowServer =  module.exports.createServer = global.createShadowServer;
 }
 
+module.exports.initFetch = initFetch;
+module.exports.Headers = Headers;
+module.exports.IncomingMessage = IncomingMessage;
+module.exports.ServerResponse = ServerResponse;
+module.exports.shadowKey = shadowKey;

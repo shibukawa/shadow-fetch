@@ -1,5 +1,6 @@
 const test = require("ava");
 const { initFetch } = require("../index");
+const fetch = require("../index");
 const { printBenchmark } = require("./helper");
 
 test("the simplest connection and receive regular output", async (t) => {
@@ -109,4 +110,26 @@ test("shadowFetch can follow redirection by default", async (t) => {
     t.is(res.redirected, true);
     const message = await res.text();
     t.is(message, "landed");
+});
+
+test("shadowFetch can detect uninitilzed status (1)", async (t) => {
+    let message = null;
+    try {
+        await fetch("/test", { method: "POST" });
+    } catch (e) {
+        message = e.message;
+    }
+    t.is(typeof message, "string");
+});
+
+test("shadowFetch can detect uninitilzed status (2)", async (t) => {
+    const { fetch } = initFetch();
+
+    let message = null;
+    try {
+        await fetch("/test", { method: "POST" });
+    } catch (e) {
+        message = e.message;
+    }
+    t.is(typeof message, "string");
 });

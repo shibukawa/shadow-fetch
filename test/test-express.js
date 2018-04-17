@@ -22,6 +22,7 @@ test("use express middleware", async (t) => {
     app.use(shadowFetchMiddleware);
     app.use(bodyParser.json());
     app.post("/test", (req, res) => {
+        t.is(req.ip, "::1");
         t.is(req.shadow, true);
         t.is(req.body.message, "hello");
         res.send({ message: "world" });
@@ -29,6 +30,7 @@ test("use express middleware", async (t) => {
     const { fetch, createServer } = initFetch();
 
     createServer(app);
+
     const res = await fetch("/test", {
         method: "post",
         headers: {

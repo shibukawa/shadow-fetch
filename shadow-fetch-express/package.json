@@ -1,6 +1,6 @@
 {
     "name": "shadow-fetch-express",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "description": "express.js middleware of shadow-fetch",
     "main": "index.js",
     "scripts": {
@@ -17,7 +17,7 @@
         "express.js"
     ],
     "dependencies": {
-        "shadow-fetch": "^0.1.2"
+        "shadow-fetch": "^0.2.0"
     },
     "author": "Yoshiki Shibukawa",
     "license": "MIT"

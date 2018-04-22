@@ -220,6 +220,10 @@ So some method calls are failed like the following error:
     at ServerResponse.send (/Users/shibukawa/develop/frx/dam-front/node_modules/express/lib/response.js:221:10)
 ```
 
+### ``Error: bundles/pages/index.js from UglifyJs Name expected`` during ``next build``
+
+Your next.js version is low. Try 5.1.0.
+
 ## License
 
 MIT

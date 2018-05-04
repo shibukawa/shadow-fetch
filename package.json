@@ -1,13 +1,14 @@
 {
     "name": "shadow-fetch",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "fake fetch/httpServer for SSR",
     "main": "index.js",
     "browser": "browser.js",
     "scripts": {
         "test": "nyc ava -v",
         "benchmark": "ava -v --serial",
-        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
+        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+        "security-test": "snyk test"
     },
     "repository": {
         "type": "git",
@@ -31,6 +32,7 @@
         "node-fetch": "^2.1.2",
         "nyc": "^11.6.0",
         "override-require": "^1.1.1",
+        "snyk": "^1.78.1",
         "streamtest": "^1.2.3",
         "unfetch": "^3.0.0"
     },

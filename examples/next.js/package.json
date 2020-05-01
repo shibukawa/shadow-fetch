@@ -6,7 +6,9 @@
   "scripts": {
     "build": "next build",
     "dev": "node server.js",
-    "start": "cross-env NODE_ENV=production node server.js"
+    "start": "cross-env NODE_ENV=production node server.js",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +21,8 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "shadow-fetch": "file:shadow-fetch-0.1.2.tgz",
-    "shadow-fetch-express": "file:shadow-fetch-express-0.1.2.tgz"
-  }
+    "shadow-fetch-express": "file:shadow-fetch-express-0.1.2.tgz",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
